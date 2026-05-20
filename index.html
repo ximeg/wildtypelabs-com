@@ -1,14 +1,235 @@
 <!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Vite + React + TS</title>
-	</head>
+<html>
+  <head>
+    <title>Wild Type Labs</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header">
+        <img
+          class="avatar"
+          src="imgs/profile-picture.jpg"
+          alt="Profile picture"
+        />
+        <div>
+          <h1>Wildtype Labs | Roman Kiselev</h1>
+          <p><span class="typewriter-text"></span></p>
+        </div>
+      </div>
+    </header>
 
-	<body>
-		<div id="root"></div>
-		<script type="module" src="/src/react-app/main.tsx"></script>
-	</body>
+    <main>
+      <section>
+        <article>
+          <p>Hi, I'm <strong>Roman Kiselev</strong>.</p>
+
+          <p>Check out my <a href="https://romankiselev.com">online portfolio</a></p>
+
+          <p>
+            I'm an <span class="highlight-blue">engineer</span> with a
+            background in
+            <strong>data science, optics, CAD, and molecular biology</strong>
+          </p>
+          <p>
+            I'm passionate about building hardware–software systems for
+            <span class="highlight2">scientific discovery</span>. I enjoy
+            collaborating on open-source tools in life sciences &
+            instrumentation.
+          </p>
+          <p>
+            Fun fact: I love
+            <span class="highlight-yellow">rock climbing</span>!
+          </p>
+          <p class="ani-links">
+            Check out my
+            <a href="https://github.com/ximeg">GitHub profile!</a>
+          </p>
+        </article>
+
+        <article>
+          <h3>My hobbies</h3>
+          <ul>
+            <li>
+              <details open>
+                <summary>🪢 Rock climbing</summary>
+                <p>
+                  I love
+                  <span class="highlight-purple">rock climbing</span> because
+                  it's a great way to stay fit and it's also a lot of fun. I
+                  usually climb at the local gym, but I also enjoy outdoor
+                  climbing when I have the chance.
+                </p>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary>🍳 Cooking</summary>
+                <p>
+                  I enjoy cooking because it's a creative outlet for me. I like
+                  trying new recipes and experimenting with different flavors.
+                </p>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary>✈️ Traveling</summary>
+                <p>
+                  I love traveling because it allows me to experience new
+                  cultures and see new places. I've been to many countries and I
+                  always enjoy exploring new cities and trying new foods.
+                </p>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary>💻 Programming</summary>
+                <p>
+                  Programming is not just my profession, but also a hobby. I
+                  enjoy solving problems and building things with code. I like
+                  learning new programming languages and frameworks.
+                </p>
+              </details>
+            </li>
+            <li>
+              <details>
+                <summary>⛷️ Skiing</summary>
+                <p>
+                  Skiing is fun! I love cross-country skiing. I don't get to do
+                  it as often as I'd like, but it's always a great experience.
+                </p>
+              </details>
+            </li>
+          </ul>
+        </article>
+
+        <article>
+          <h3>📍 Where I lived</h3>
+          <div
+            id="years-chart"
+            class="chart-container"
+            aria-label="Bar chart showing years lived in each place"
+          ></div>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <nav>
+        <a class="navigation" href="https://github.com/ximeg">
+          <img
+            class="social-logo"
+            src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+            alt="GitHub"
+          />
+          My GitHub
+        </a>
+        <a class="navigation" href="https://linkedin.com/in/kiselevroman">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/174/174857.png"
+            alt="LinkedIn"
+            class="social-logo"
+          />
+          My LinkedIn
+        </a>
+      </nav>
+    </footer>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script>
+      const yearsLived = [
+        { name: "Leningrad, Russia", value: 2 },
+        { name: "Belarus", value: 2 },
+        { name: "Podgornoye, Russia", value: 12 },
+        { name: "Tomsk, Russia", value: 6 },
+        { name: "Jena, Germany", value: 9 },
+        { name: "Memphis, USA", value: 6 },
+        { name: "San Francisco, USA", value: 0.1 },
+      ];
+
+      const margin = { top: 30, right: 20, bottom: 40, left: 170 };
+      const width = 500;
+      const height = 280;
+
+      const svg = d3
+        .select("#years-chart")
+        .append("svg")
+        .attr("viewBox", `0 0 ${width} ${height}`)
+        .attr("role", "img")
+        .attr("aria-label", "Bar chart showing years lived in each location");
+
+      const x = d3
+        .scaleLinear()
+        .domain([0, d3.max(yearsLived, (d) => d.value) * 1.1])
+        .range([margin.left, width - margin.right]);
+
+      const y = d3
+        .scaleBand()
+        .domain(yearsLived.map((d) => d.name))
+        .range([margin.top, height - margin.bottom])
+        .padding(0.25);
+
+      svg /* horizontal axis with years lived */
+        .append("g")
+        .attr("transform", `translate(0, ${margin.top})`)
+        .call(
+          d3
+            .axisTop(x)
+            .ticks(5)
+            .tickFormat((d) => `${d} yr`),
+        )
+        .call((g) => g.select(".domain").remove());
+
+      svg /* vertical axis with location names */
+        .append("g")
+        .attr("transform", `translate(${margin.left}, 0)`)
+        .call(d3.axisLeft(y).tickSize(0))
+        .call((g) => g.selectAll(".tick text").style("font-size", "0.95rem"));
+
+      svg
+        .append("g")
+        .selectAll("rect")
+        .data(yearsLived)
+        .join("rect")
+        .attr("x", margin.left)
+        .attr("y", (d) => y(d.name))
+        .attr("width", (d) => x(d.value) - margin.left)
+        .attr("height", y.bandwidth())
+        .attr("fill", "steelblue")
+        .attr("rx", 3);
+
+      svg
+        .append("g")
+        .selectAll("text.value")
+        .data(yearsLived)
+        .join("text")
+        .attr("class", "value")
+        .attr("x", (d) => x(d.value) + 5)
+        .attr("y", (d) => y(d.name) + y.bandwidth() / 2)
+        .attr("dy", "0.35em")
+        .text((d) => `${d.value} yr`)
+        .style("font-size", "0.75rem")
+        .style("font-weight", 600)
+        .attr("fill", "#333");
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script>
+      new Typed(".typewriter-text", {
+        strings: [
+          "Engineer &nbsp;",
+          "Data Scientist &nbsp;",
+          "Instrumentation Specialist &nbsp;",
+          "Rock Climber &nbsp;",
+          "Problem Solver &nbsp;",
+        ],
+        typeSpeed: 50,
+        backSpeed: 20,
+        backDelay: 2500,
+        loop: true,
+      });
+    </script>
+  </body>
 </html>
